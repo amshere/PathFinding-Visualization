@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles/styles.css" />
+    <link rel="stylesheet" href="./styles/MessageBox.css" />
+    <link rel="stylesheet" href="./styles/grid.css" />
+    <link rel="stylesheet" href="./styles/titlebar.css" />
+    <title>PathFindingVisualizer</title>
+  </head>
+  <body>
+    <div class="titleBar">
+      <div class="titleContainer"><h2>PathFinding Visualizer</h2></div>
+      <div class="buttonContainer">
+        <div class="selectionBox">
+          <h3 class="selectionBoxTitle">Pick an algorithm :</h3>
+          <div class = "algorithm">
+            <input type="checkbox" id="algorithm1" class="algorithm-checkbox" name="algorithm1" value="BFS">
+            <label for="algorithm1"> BFS</label><br>
+            <input type="checkbox" id="algorithm2" name="algorithm2" class="algorithm-checkbox" value="DFS">
+            <label for="algorithm2"> DFS</label><br>
+            <input type="checkbox" id="algorithm3" name="algorithm3" class="algorithm-checkbox" value="Astar">
+            <label for="algorithm3"> Astar</label><br>
+            <input type="checkbox" id="algorithm4" name="algorithm4" class="algorithm-checkbox" value="Dijakstra">
+            <label for="algorithm4"> Dijakstra</label><br>
+          </div>
+          <!-- <input type="checkbox" id="algorithm1" name="algorithm1" value="BFS">
+          <label for="algorithm1"> BFS</label><br>
+          <input type="checkbox" id="algorithm2" name="algorithm2" value="DFS">
+          <label for="algorithm2"> DFS</label><br>
+          <input type="checkbox" id="algorithm3" name="algorithm3" value="Astar">
+          <label for="algorithm3"> Astar</label><br>
+          <input type="checkbox" id="algorithm4" name="algorithm4" value="Dijakstra">
+          <label for="algorithm4"> Dijakstra</label><br> -->
+          <!-- <select name="algorithm" class="algorithm">
+            <option value="BFS">BFS</option>
+            <option value="DFS">DFS</option>
+            <option value="Astar">Astar</option>
+            <option value="Dijakstra">Dijakstra</option>
+          </select> -->
+        </div>
+        <div class="buttons">
+          <button class="visualizeBtn">Visualize</button>
+          <button class="clearPath">Clear Path</button>
+          <button class="resetGrid">Reset Grid</button>
+          <button class="generateMaze">Generate Maze</button>
+        </div>
+      </div>
+    </div>
+    <div class="messageBox">
+      <p class="message">Select any algorithm to visualize</p>
+    </div>
+    <div class="mainbody">
+      <canvas id="grid-layer"></canvas>
+      <canvas id="grid"> </canvas>
+    </div>
+    <footer>
+      
+    </footer>
+    <script type="module" src="./script/app.js"></script>
+  </body>
+</html>
