@@ -2,13 +2,22 @@ import { GenerateMaze } from "./Algorithms/RecursiveBackTack.js";
 import { Node } from "./node.js";
 import * as gridFunc from "./grid.js";
 
+const isPathFindingPage = window.location.pathname.includes("pathFinding")
+
+const selectedAlgorithms = [];
+
 window.addEventListener("load", () => {
+
     const grid = document.querySelector("#grid");
     const ctx = grid.getContext("2d");
     const width = 1000;
     const rows = 50;
     const gridLayer = document.querySelector("#grid-layer");
     const visualizeBtn = document.querySelector(".visualizeBtn");
+    const enableVisualizeBtn = () => {
+      visualizeBtn.disabled = false;
+      
+    };
     const selectAlgorithm = document.querySelector(".algorithm");
     const clearPathBtn = document.querySelector(".clearPath");
     const resetGridBtn = document.querySelector(".resetGrid");
@@ -28,7 +37,6 @@ window.addEventListener("load", () => {
     let drawEnd = false;
     let startNode = null;
     let endNode = null;
-    selectAlgorithm.selectedIndex = -1;
     visualizeBtn.disabled = true;
     let [sNode, eNode] = gridFunc.pickRandStartAndEnd(ctx, cellList);
     startNode = sNode;
@@ -105,16 +113,23 @@ window.addEventListener("load", () => {
 
       //select algorithms
       const algorithmCheckboxes = document.querySelectorAll(".algorithm-checkbox");
-      const selectedAlgorithms = [];
+      
       
       algorithmCheckboxes.forEach((checkbox) => {
         checkbox.addEventListener("change", () => {
+          console.log({selectedAlgorithms})
           if (checkbox.checked) {
+            enableVisualizeBtn();
             selectedAlgorithms.push(checkbox.value);
           } else {
             const index = selectedAlgorithms.indexOf(checkbox.value);
+            
             if (index > -1) {
               selectedAlgorithms.splice(index, 1);
+            }
+            if( selectedAlgorithms.length == 0)
+            {
+              visualizeBtn.disabled=true;
             }
           }
         });
@@ -123,25 +138,10 @@ window.addEventListener("load", () => {
       visualizeBtn.addEventListener("click", (e) => {
         if (startNode !== null && endNode !== null) {
           if (selectedAlgorithms.length > 0) {
-            disableButtonAndGrid();
-            selectedAlgorithms.forEach((algorithm) => {
-              switch (algorithm) {
-                case "BFS":
-                  runBFSAlgo(ctx, cellList, startNode, endNode);
-                  break;
-                case "DFS":
-                  runDFSAlgo(ctx, cellList, startNode, endNode);
-                  break;
-                case "Astar":
-                  runAstarAlgo(ctx, cellList, startNode, endNode);
-                  break;
-                case "Dijakstra":
-                  runDijakstraAlgo(ctx, cellList, startNode, endNode);
-                  break;
-                default:
-                  break;
-              }
-            });
+            //disableButtonAndGrid();
+            // console.log("i'm here");
+            enableVisualizeBtn();
+           
           } else {
             messageBox.textContent = "At least one algorithm must be selected for visualization";
             messageBox.style.color = "red";
@@ -150,6 +150,21 @@ window.addEventListener("load", () => {
           messageBox.textContent = "Start Node and End Node need to be selected";
           messageBox.style.color = "red";
         }
+      });
+      visualizeBtn.addEventListener("click", (e) => {
+        if (startNode !== null && endNode !== null) {
+          localStorage.setItem("grid",  JSON.stringify(cellList)) //normal start and end point
+          localStorage.setItem("algorithms", selectedAlgorithms)
+          window.location.pathname = "/pathFinding.html"
+          
+          disableButtonAndGrid();
+        } else {
+          messageBox.textContent = "Start Node and End Node needs to be selected";
+          messageBox.style.color = "red";
+        }
+
+        //here algorithms
+        
       });
 
       const disableButtonAndGrid = () => {
@@ -160,7 +175,7 @@ window.addEventListener("load", () => {
         selectAlgorithm.disabled = true;
         grid.style.pointerEvents = "none";
       };
-
+     
       
       const enableAll = () => {
         visualizeBtn.disabled = false;
@@ -170,16 +185,7 @@ window.addEventListener("load", () => {
         selectAlgorithm.disabled = false;
         grid.style.pointerEvents = "all";
       };
-      visualizeBtn.addEventListener("click", (e) => {
-        if (startNode !== null && endNode !== null) {
-          disableButtonAndGrid();
-        } else {
-          messageBox.textContent = "Start Node and End Node needs to be selected";
-          messageBox.style.color = "red";
-        }
-
-        //here algorithms
-      });
+     
       resetGridBtn.addEventListener("click", () => {
         enableBtnAndGrid();
         cellList.forEach((row) => {
@@ -213,7 +219,27 @@ window.addEventListener("load", () => {
             cell.resetNode();
           });
         });
+
         GenerateMaze(ctx, cellList, list).then((val) => {
+          if(selectedAlgorithms.includes("BFS"))
+          {
+            localStorage.setItem("grid-bfs",  JSON.stringify(cellList))
+
+          }
+          if(selectedAlgorithms.includes("DFS"))
+          {
+            localStorage.setItem("grid-dfs",  JSON.stringify(cellList))
+
+          }
+          if(selectedAlgorithms.includes("Astar"))
+          {
+            localStorage.setItem("grid-Astar",  JSON.stringify(cellList))
+          }
+          if(selectedAlgorithms.includes("Dijkstra"))
+          {
+            localStorage.setItem("grid-dijkstra",  JSON.stringify(cellList))
+          }
+          console.log({cellList, list})
           if (val) {
             visualizeBtn.disabled = false;
             selectAlgorithm.disabled = false;
@@ -248,3 +274,55 @@ window.addEventListener("load", () => {
         });
       });
 });
+
+
+if (isPathFindingPage){
+  window.addEventListener("load", ()=> {
+
+    const gridMaze = localStorage.getItem("grid")
+
+    if (gridMaze == null) {
+      // TODO: provide a default maze (can have a start and end point only) 
+      return 
+    }
+    if(selectedAlgorithms.includes("BFS"))
+    {
+      document.getElementById("BfsGridDiv").classList.remove("d-none")
+      const gridBFS = document.querySelector("#gridBFS");
+      const gridLayerBFS = document.querySelector("#grid-layerBFS");
+    }
+    if(selectedAlgorithms.includes("DFS"))
+    {
+      const gridDFS = document.querySelector("#gridDFS");
+      const gridLayerDFS = document.querySelector("#grid-layerDFS");
+    }
+    if(selectedAlgorithms.includes("Astar"))
+    {
+      const gridAstar = document.querySelector("#gridAstar");
+      const gridLayerAstar = document.querySelector("#grid-layerAstar");
+    }
+    if(selectedAlgorithms.includes("Dijkstra"))
+    {
+      const gridBFS = document.querySelector("#griDijkstra");
+      const gridLayerBFS = document.querySelector("#grid-layerDijkstra");
+    }
+
+    const MAZE = JSON.parse(gridMaze)
+    
+    // const gridDFS = document.querySelector("#gridDFS");
+    // const gridAstar = document.querySelector("#gridAstar");
+    // const gridDijkstra = document.querySelector("#gridDijkstra");
+    
+    // const gridLayerDFS = document.querySelector("#grid-layerDFS");
+    // const gridLayerAstar = document.querySelector("#grid-layerAstar");
+    // const gridLayerDijkstra = document.querySelector("#grid-layerDijkstra");
+    
+    //  TODO 
+    //  1. get div reference, canvas reference ==>   function(ctx,ref) =>  draw
+    // var canvasbfs = document.getElementById('grid-layerBFS');
+    // var divbfs = document.getElementById('algoBFS');
+    //  2. data =>  render into the grids ==>   needs a function(maze, ctx) =>  output 
+    //  3. add the algorithms  
+
+  })
+}
