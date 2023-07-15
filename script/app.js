@@ -29,7 +29,7 @@ window.addEventListener("load", () => {
     grid.width = width;
     grid.height = width / 2;
     const cellList = gridFunc.getCellList(rows, width);
-    gridFunc.drawGrid(ctx, cellList, rows, width);
+    gridFunc.drawGrid(ctx, cellList);
     gridFunc.drawGridLines(context, rows, width);
     let drawWall = false;
     let removeWall = false;

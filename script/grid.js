@@ -1,4 +1,5 @@
 import { Node } from "./node.js";
+
 function getCellPos(xpos, ypos, width, rows) {
   let x = xpos;
   let y = ypos;
@@ -35,7 +36,7 @@ function drawGridLines(ctx, rows, bw) {
     }
     ctx.stroke();
   }
-  function drawGrid(ctx, cellList, rows, width) {
+  function drawGrid(ctx, cellList ) {
     cellList.forEach((row) => {
       row.forEach((elem) => {
         elem.setNotVisited(ctx);
